@@ -5,7 +5,11 @@
 
 # An example controller showing a sample home page
 GET     /           controllers.HomeController.index
-GET     /hello      controllers.HomeController.hello(name: String)
+
+POST    /numberOfPlaces     controllers.NumberOfPlacesController.index()
+POST    /ship               controllers.ShipController.index()
+GET     /next               controllers.NextShipController.index()
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

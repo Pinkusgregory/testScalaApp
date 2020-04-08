@@ -24,7 +24,4 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     //Redirect("/user/home", MOVED_PERMANENTLY)
   }
 
-  def hello(name: String) = Action {
-    Ok(views.html.hello(name))
-  }
 }
