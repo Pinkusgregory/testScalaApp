@@ -20,6 +20,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    */
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
+    //Status(488)("Strange response type")
+    //Redirect("/user/home", MOVED_PERMANENTLY)
   }
 
   def hello(name: String) = Action {
