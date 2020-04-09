@@ -6,9 +6,9 @@
 # An example controller showing a sample home page
 GET     /           controllers.HomeController.index
 
-POST    /numberOfPlaces     controllers.NumberOfPlacesController.index()
-POST    /ship               controllers.ShipController.index()
-GET     /next               controllers.NextShipController.index()
+POST    /numberOfPlaces     controllers.ManufactoryController.numberOfPlaces()
+POST    /ship               controllers.ManufactoryController.ship()
+GET     /next               controllers.ManufactoryController.next()
 
 
 # Map static resources from the /public folder to the /assets URL path
