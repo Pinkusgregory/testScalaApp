@@ -1,3 +1,5 @@
+package models
+
 import scala.collection.mutable
 import scala.collection.mutable.Queue
 
