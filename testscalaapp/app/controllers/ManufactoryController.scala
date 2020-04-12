@@ -12,19 +12,23 @@ import models._
 @Singleton
 class ManufactoryController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   
-  case class ReadSmth(first: Int, second: Int)
-  case class WriteSmth(response: Int, response2: Int)
+  case class ReadSmth2(timeOfArrival: Int, handleTime: Int)
+  case class ReadSmth(numberOfPlaces: Int)
+  case class WriteSmth(response: Int)
 
   val manufactory = new Manufactory()
 
   implicit val writer: Writes[WriteSmth] = (
-    (JsPath \ "response").write[Int] and
-    (JsPath \ "response2").write[Int]
-  )(unlift(WriteSmth.unapply))
+    (JsPath \ "response").write[Int].contramap(_.response)
+  )
 
-  implicit val reader: Reads[ReadSmth] = (
-    (JsPath \ "first").read[Int].and((JsPath \ "second").read[Int])
-  )(ReadSmth.apply _)
+  implicit val reader1: Reads[ReadSmth] = (
+    (JsPath \ "numberOfPlaces").read[Int].map(ReadSmth(_))
+  )
+
+  implicit val reader2: Reads[ReadSmth2] = (
+    (JsPath \ "timeOfArrival").read[Int].and((JsPath \ "handleTime").read[Int])
+  )(ReadSmth2.apply _)
 
   def validateJson[A: Reads] = parse.json.validate(
   _.validate[A].asEither.left.map(e => BadRequest(JsError.toJson(e)))
@@ -32,13 +36,13 @@ class ManufactoryController @Inject()(cc: ControllerComponents) extends Abstract
 
   def numberOfPlaces = Action(validateJson[ReadSmth]) { implicit request =>
     val places = request.body
-    manufactory.placesMax = places.first
+    manufactory.placesMax = places.numberOfPlaces
     Ok(Results.EmptyContent())
   }
 
-  def ship() = Action(validateJson[ReadSmth]) { implicit request =>
+  def ship() = Action(validateJson[ReadSmth2]) { implicit request =>
     val places = request.body
-    var ship = new Ship(places.first, places.second)
+    var ship = new Ship(places.timeOfArrival, places.handleTime)
     manufactory.AddShip(ship)
     Ok(Results.EmptyContent())
   }
@@ -49,7 +53,7 @@ class ManufactoryController @Inject()(cc: ControllerComponents) extends Abstract
     }
     else{
       val answer = manufactory.Solve()
-      val response = WriteSmth(answer, answer)
+      val response = WriteSmth(answer)
       Ok(Json.toJson(response))
     }
   }
