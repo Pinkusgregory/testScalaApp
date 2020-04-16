@@ -4,6 +4,7 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
+import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -23,11 +24,12 @@ class ManufactoryController @Inject()(cc: ControllerComponents) extends Abstract
   )
 
   implicit val reader1: Reads[ReadSmth] = (
-    (JsPath \ "numberOfPlaces").read[Int].map(ReadSmth(_))
+    (JsPath \ "numberOfPlaces").read[Int](min(1).keepAnd(max(100000))).map(ReadSmth(_))
   )
 
   implicit val reader2: Reads[ReadSmth2] = (
-    (JsPath \ "timeOfArrival").read[Int].and((JsPath \ "handleTime").read[Int])
+    (JsPath \ "timeOfArrival").read[Int](min(0).keepAnd(max(1000000)))
+    .and((JsPath \ "handleTime").read[Int](min(0).keepAnd(max(1000))))
   )(ReadSmth2.apply _)
 
   def validateJson[A: Reads] = parse.json.validate(

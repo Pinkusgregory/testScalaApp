@@ -7,12 +7,17 @@ class Manufactory(){
 
   var placesMax: Int = 0;
   var time: Int = 0;
-  var ships: Queue[Ship] = new Queue[Ship]
-  var shipsUsed: Queue[Ship] = new Queue[Ship]
+  var ships: Queue[Ship] = new Queue[Ship](100000)
+  var shipsUsed: Queue[Ship] = new Queue[Ship](100000)
 
   def Solve(): Int = {
 
     var firstEl = ships.dequeue
+        
+    if (time == 0) {
+      time = firstEl.timeOfArrival
+    }
+    
     var _time = time
 
     for(shipUsed <- shipsUsed){
