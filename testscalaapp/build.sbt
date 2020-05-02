@@ -4,8 +4,6 @@ organization := "com.pinkusgregory"
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
-lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, PlayAkkaHttp2Support)
 
 PlayKeys.devSettings := Seq("play.server.http.port" -> "8888")
 
