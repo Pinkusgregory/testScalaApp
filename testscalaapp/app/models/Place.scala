@@ -1,5 +1,3 @@
 package models
 
-case class Place(var time: Int) {
-
-}
+class Place(var timeShipLeavePlace: Int = 0)

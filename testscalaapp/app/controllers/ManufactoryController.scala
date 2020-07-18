@@ -40,7 +40,7 @@ class ManufactoryController @Inject()(cc: ControllerComponents) extends Abstract
     val placesRequest = request.body
     manufactory = new Manufactory()
     for (i <- 0 until placesRequest.numberOfPlaces){
-      manufactory.AddPlace(new Place(0))
+      manufactory.AddPlace(new Place)
     }
     Ok(Results.EmptyContent())
   }
