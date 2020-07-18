@@ -5,45 +5,34 @@ import scala.collection.mutable.Queue
 
 class Manufactory(){
 
-  var placesMax: Int = 0;
-  var time: Int = 0;
+  var timeRobotGoesToNextShip: Int = 0
+  var places: Queue[Place] = new Queue[Place](100000)
   var ships: Queue[Ship] = new Queue[Ship](100000)
-  var shipsUsed: Queue[Ship] = new Queue[Ship](100000)
 
   def Solve(): Int = {
 
     var firstEl = ships.dequeue
-        
-    if (time == 0) {
-      time = firstEl.timeOfArrival
-    }
-    
-    var _time = time
 
-    for(shipUsed <- shipsUsed){
-      if(firstEl.timeOfArrival < shipUsed.timeLeave){
-        firstEl.placeNumber += 1
+    if (timeRobotGoesToNextShip == 0){
+      timeRobotGoesToNextShip = firstEl.timeOfArrival
+    }
+
+    for(place <- places){
+      if (place.timeShipLeavePlace <= firstEl.timeOfArrival){
+        timeRobotGoesToNextShip += firstEl.handleTime
+        place.timeShipLeavePlace = timeRobotGoesToNextShip
+        return timeRobotGoesToNextShip - firstEl.handleTime
       }
     }
-
-    AddShipUsed(firstEl)
-
-    if ((firstEl.timeOfArrival >= time && firstEl.placeNumber <= placesMax) || firstEl.placeNumber <= placesMax) {
-      time += firstEl.handleTime
-      firstEl.timeLeave = time
-      _time;
-    } else {
-      -1;
-    }
-
+    return -1
   }
 
   def AddShip(ship: Ship){
     ships.enqueue(ship);
   }
 
-  def AddShipUsed(ship: Ship){
-    shipsUsed.enqueue(ship)
+  def AddPlace(place: Place){
+    places.enqueue(place);
   }
 
 }
