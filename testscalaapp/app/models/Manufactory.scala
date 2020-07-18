@@ -5,27 +5,26 @@ import scala.collection.mutable.Queue
 
 class Manufactory(){
 
-  var places: Queue[Place] = new Queue[Place](10000)
+  var timeRobotGoesToNextShip: Int = 0
+  var places: Queue[Place] = new Queue[Place](100000)
   var ships: Queue[Ship] = new Queue[Ship](100000)
 
   def Solve(): Int = {
 
     var firstEl = ships.dequeue
 
-    for(place <- places){
-      if (place.time < firstEl.timeOfArrival){
-        place.time = firstEl.timeOfArrival + firstEl.handleTime
-        return firstEl.timeOfArrival
-      }
-      if (place.time == firstEl.timeOfArrival){
-        place.time += firstEl.handleTime
-        return place.time - firstEl.handleTime
-      }
-
+    if (timeRobotGoesToNextShip == 0){
+      timeRobotGoesToNextShip = firstEl.timeOfArrival
     }
 
+    for(place <- places){
+      if (place.timeShipLeavePlace <= firstEl.timeOfArrival){
+        timeRobotGoesToNextShip += firstEl.handleTime
+        place.timeShipLeavePlace = timeRobotGoesToNextShip
+        return timeRobotGoesToNextShip - firstEl.handleTime
+      }
+    }
     return -1
-
   }
 
   def AddShip(ship: Ship){
